@@ -33,12 +33,13 @@ class GO_Events_Import_Speakers extends GO_Events_Import_Abstract
 	{
 		foreach ( $data as $speaker )
 		{
-			$post = get_posts( array(
+			$args = array(
 				'name' => $speaker['slug'],
 				'post_type' => go_events()->event()->speaker()->post_type_name,
 				'post_status' => array( 'draft', 'publish', 'future' ),
 				'post_parent' => $this->event->ID,
-			) );
+			);
+			$post = get_posts( $args );
 
 			if ( $post )
 			{
@@ -68,6 +69,10 @@ class GO_Events_Import_Speakers extends GO_Events_Import_Abstract
 				continue;
 			}//end if
 
+			$file_url = 'http://wp.gigaom.com/assets/speakers/80/' . str_replace( '-', '_', $speaker['slug'] ) . '.jpg';
+
+			go_events_import()->attach_image( $file_url, $post_id );
+
 			$meta = array(
 				'company_name' => $speaker['company'],
 				'facebook' => $speaker['facebook'],
@@ -80,6 +85,7 @@ class GO_Events_Import_Speakers extends GO_Events_Import_Abstract
 			);
 
 			go_events()->event()->speaker()->admin()->update_meta( $post_id, $meta, FALSE );
+			break;
 		}//end foreach
 	}//end insert_data
 }//end class

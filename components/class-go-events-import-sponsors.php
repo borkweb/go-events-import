@@ -59,6 +59,17 @@ class GO_Events_Import_Sponsors extends GO_Events_Import_Abstract
 				$sponsor['type'] = 'partner';
 			}//end if
 
+			if ( 'primetime' == $sponsor['type'] )
+			{
+				$file_url = 'http://wp.gigaom.com/assets/sponsors/primetimehome/' . str_replace( '-', '_', $sponsor['slug'] ) . '.gif';
+				go_events_import()->attach_image( $file_url, $post_id );
+			}//end if
+			else
+			{
+				$file_url = 'http://wp.gigaom.com/assets/sponsors/showtimehome/' . str_replace( '-', '_', $sponsor['slug'] ) . '.gif';
+				go_events_import()->attach_image( $file_url, $post_id );
+			}//end else
+
 			wp_set_object_terms( $post_id, $sponsor['type'], go_events()->event()->sponsor()->level_taxonomy_name, FALSE );
 
 			$meta = array(
