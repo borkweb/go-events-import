@@ -52,8 +52,13 @@ abstract class GO_Events_Import_Abstract
 			return FALSE;
 		}//end if
 
+		preg_match( '/(.*)-([0-9]+)-([^\-]+).csv$/', $this->file, $matches );
+
+		$this->file = 'csv/' . $matches[1] . '/' . $matches[2] . '/' . $this->file;
+
 		if ( ! file_exists( $this->file ) )
 		{
+			fwrite( STDOUT, "Can't find {$this->file}" );
 			throw new Exception( "Could not find {$this->file} file to process" );
 
 			return FALSE;

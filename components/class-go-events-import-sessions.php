@@ -15,14 +15,21 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 
 	public function go_events_import_current_key( $key, $line )
 	{
-		// if we are on a date line, we're beginning a new set of records
-		if ( $date = $this->get_line_data( $line, 'Date' ) )
+		if ( ! in_array( 'Date', $this->column_keys ) )
 		{
-			$date = explode( '/', $date );
-			$this->current_date = $date[2] . '-' . str_pad( $date[0], 2, '0', STR_PAD_LEFT ) . '-' . str_pad( $date[1], 2, '0', STR_PAD_LEFT );
-
-			return FALSE;
+			$this->current_date = date('Y-m-d', strtotime( $this->event->post_date ) );
 		}//end if
+		else
+		{
+			// if we are on a date line, we're beginning a new set of records
+			if ( $date = $this->get_line_data( $line, 'Date' ) )
+			{
+				$date = explode( '/', $date );
+				$this->current_date = $date[2] . '-' . str_pad( $date[0], 2, '0', STR_PAD_LEFT ) . '-' . str_pad( $date[1], 2, '0', STR_PAD_LEFT );
+
+				return FALSE;
+			}//end if
+		}//end else
 
 		$title = $this->get_line_data( $line, 'Title' );
 
@@ -36,7 +43,8 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 			}//end if
 			else
 			{
-				throw new Exception( 'Not a standard session format' );
+				$this->current_title = $title;
+				$this->sub_session = TRUE;
 			}//end else
 		}//end if
 		elseif ( $time && $title )

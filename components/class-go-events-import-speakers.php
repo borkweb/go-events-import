@@ -85,7 +85,6 @@ class GO_Events_Import_Speakers extends GO_Events_Import_Abstract
 			);
 
 			go_events()->event()->speaker()->admin()->update_meta( $post_id, $meta, FALSE );
-			break;
 		}//end foreach
 	}//end insert_data
 }//end class
