@@ -7,6 +7,7 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 	public $description = 'Import sessions into an existing event';
 	public $current_date = NULL;
 	public $session = array();
+	public $sub_session = FALSE;
 
 	public function __construct()
 	{
@@ -215,7 +216,7 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 				$meta['session_location'] = $session['location'];
 			}//end if
 
-			if ( $session['sponsors'] )
+			if ( isset( $session['sponsors'] ) && $session['sponsors'] )
 			{
 				foreach ( $session['sponsors'] as $name )
 				{
@@ -226,7 +227,7 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 						'post_parent' => $this->event->ID,
 					) );
 
-					if ( ! $sponsor[0] )
+					if ( ! isset( $sponsor[0] ) || ! $sponsor[0] )
 					{
 						fwrite( STDOUT, 'Could not find a sponsor with the name: ' . $name . ' to attach to ' . $session['title'] );
 						continue;
@@ -240,7 +241,7 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 				}//end foreach
 			}//end if
 
-			if ( $session['speakers'] )
+			if ( isset( $session['speakers'] ) && $session['speakers'] )
 			{
 				foreach ( $session['speakers'] as $speaker_name )
 				{
@@ -269,7 +270,7 @@ class GO_Events_Import_Sessions extends GO_Events_Import_Abstract
 				}//end foreach
 			}//end if
 
-			if ( $session['panelists'] )
+			if ( isset( $session['panelists'] ) && $session['panelists'] )
 			{
 				foreach ( $session['panelists'] as $panelist_name )
 				{

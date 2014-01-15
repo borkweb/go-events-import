@@ -63,10 +63,14 @@ for ( $count = 0; $line = fgetcsv( $handle, 0, ',' ); $count++ )
 
 	fwrite( STDOUT, print_r( $line, TRUE ) );
 
-	$event_name = $line[ $column_indexes[ 'event' ] ];
-	$event_slug = $line[ $column_indexes[ 'slug' ] ];
-	$event_start = $line[ $column_indexes[ 'start' ] ];
-	$event_end = $line[ $column_indexes[ 'end' ] ];
+	$event_name = $line[ $column_indexes['event'] ];
+	$event_slug = $line[ $column_indexes['slug'] ];
+	$event_start = $line[ $column_indexes['start'] ];
+	$event_end = $line[ $column_indexes['end'] ];
+	$tagline = $line[ $column_indexes['tagline'] ];
+	$building = $line[ $column_indexes['Location'] ];
+	$city = $line[ $column_indexes['City'] ];
+	$timezone = $line[ $column_indexes['timezone'] ];
 
 	if ( ! $event_start )
 	{
@@ -109,6 +113,10 @@ for ( $count = 0; $line = fgetcsv( $handle, 0, ',' ); $count++ )
 		$meta = array(
 			'start' => $event_start,
 			'end' => $event_end,
+			'tagline' => $tagline,
+			'building' => $building,
+			'city' => $city,
+			'timezone' => $timezone,
 		);
 
 		go_events()->event()->admin()->update_meta( $post_id, $meta );
@@ -116,6 +124,7 @@ for ( $count = 0; $line = fgetcsv( $handle, 0, ',' ); $count++ )
 		event_import( 'sponsors', $event_slug );
 		event_import( 'speakers', $event_slug );
 		event_import( 'schedule', $event_slug );
+		die;
 	}//end if
 }//end for
 fclose( $handle );
